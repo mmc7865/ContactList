@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media screen and (max-width: 768px){
+    .contact{
+        width: 100%;
+        margin-top: 20%;
+    }
+    form{
+        width: 80% !important; 
+        /* border: 2px solid red; */
+    }
+    
+}

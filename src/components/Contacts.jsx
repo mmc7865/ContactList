@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ContactsDataContext } from "../context/postContext";
 import { Link } from "react-router-dom";
 
 const Contacts = () => {
   const [contacts, setContacts] = useContext(ContactsDataContext);
+  const [currentPage, setCurrentPage] = useState(1);
+  const contactsPerPage = 6;
 
   if (!Array.isArray(contacts)) {
     return <p>No contacts available.</p>;
@@ -15,9 +17,15 @@ const Contacts = () => {
     localStorage.setItem("contacts", JSON.stringify(updatedContacts));
   };
 
+  const indexOfLastContact = currentPage * contactsPerPage;
+  const indexOfFirstContact = indexOfLastContact - contactsPerPage;
+  const currentContacts = contacts.slice(indexOfFirstContact, indexOfLastContact);
+
+  const totalPages = Math.ceil(contacts.length / contactsPerPage);
+
   return (
-    <div className="w-[30%] m-auto px-5 py-3">
-      {contacts.map((contact, index) => (
+    <div className="contact w-[30%] m-auto px-5 py-3">
+      {currentContacts.map((contact, index) => (
         <div
           key={index}
           className="flex gap-2 justify-between items-center pr-8 p-2 mb-2 bg-zinc-100 rounded-[50px]"
@@ -47,6 +55,22 @@ const Contacts = () => {
           </div>
         </div>
       ))}
+      <div className="pagination flex justify-between mx-4 mt-12">
+        <button
+          onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-gray-100 font-semibold rounded-md cursor-pointer hover:bg-gray-300"
+        >
+          Previous
+        </button>
+        <button
+          onClick={() => setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 bg-gray-100 font-semibold rounded-md cursor-pointer hover:bg-gray-300"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
