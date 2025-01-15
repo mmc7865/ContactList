@@ -45,6 +45,7 @@ const Create = () => {
         setEmail("");
         setPhone("");
         setImage(null);
+        navigate("/");
     };
 
     return (
